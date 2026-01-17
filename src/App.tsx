@@ -52,6 +52,20 @@ export const App: React.FC = () => {
       .catch(() => setError('LOAD_TODOS'));
   }, []);
 
+  useEffect(() => {
+    if (!error) {
+      return;
+    }
+
+    const timerId = setTimeout(() => {
+      setError(null);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [error]);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -63,7 +77,9 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <TodoList todos={visibleTodos} />
-        <Footer onStatusChange={setStatus} />
+        {todos.length > 0 && (
+          <Footer onStatusChange={setStatus} status={status} todos={todos} />
+        )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}

@@ -1,19 +1,23 @@
+import { Todo } from '../../types/Todo';
+
 type Props = {
+  status: string;
   onStatusChange: (status: string) => void;
+  todos: Todo[];
 };
 
-export const Footer: React.FC<Props> = ({ onStatusChange }) => {
+export const Footer: React.FC<Props> = ({ onStatusChange, status, todos }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {todos.filter(todo => !todo.completed).length} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className="filter__link selected"
+          className={`filter__link ${status === 'all' ? 'selected' : ''}`}
           data-cy="FilterLinkAll"
           onClick={() => {
             onStatusChange('all');
@@ -24,7 +28,7 @@ export const Footer: React.FC<Props> = ({ onStatusChange }) => {
 
         <a
           href="#/active"
-          className="filter__link"
+          className={`filter__link ${status === 'active' ? 'selected' : ''}`}
           data-cy="FilterLinkActive"
           onClick={() => {
             onStatusChange('active');
@@ -35,7 +39,7 @@ export const Footer: React.FC<Props> = ({ onStatusChange }) => {
 
         <a
           href="#/completed"
-          className="filter__link"
+          className={`filter__link ${status === 'completed' ? 'selected' : ''}`}
           data-cy="FilterLinkCompleted"
           onClick={() => {
             onStatusChange('completed');
